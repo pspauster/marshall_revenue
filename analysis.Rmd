@@ -44,10 +44,14 @@ marshalls_list <- page %>%
 evictions <- read.socrata("https://data.cityofnewyork.us/resource/6z8x-wfk4.csv") %>% 
   mutate(year = year(executed_date))
 
+executed_by_marshall_year <- evictions %>% 
+  group_by(marshal_first_name, marshal_last_name, year) %>% 
+  summarize(no_evictions = sum(!is.na(executed_date), na.rm = T))
+
 ```
 
 ```{r}
-marshalls_evictions_revenue <- full_join(marshall_revenue, evictions, by = c("marshal_last_name" = "marshal_last_name", "year" = "year"))
+marshalls_evictions_revenue <- full_join(marshall_revenue, executed_by_marshall_year, by = c("marshal_last_name" = "marshal_last_name", "year" = "year"))
 ```
 
 ```{r}
