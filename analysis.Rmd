@@ -1,0 +1,64 @@
+---
+title: "analysis"
+author: "Patrick"
+date: "2023-07-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(RSocrata)
+library(rvest)
+library(xml2)
+```
+
+```{r}
+
+marshall_revenue <- read.socrata("https://data.cityofnewyork.us/resource/7ewi-9cdf.csv") %>% 
+  separate(marshal_last_name, into = c("marshal_last_name", "marshal_first init"), sep = ", | \\(")
+
+```
+
+```{r}
+# URL of the website containing the table
+url <- "https://www.nyc.gov/site/doi/offices/marshals-list.page"
+
+# Read the HTML content of the page
+page <- read_html(url)
+
+# Extract the table from the HTML content
+# Replace "table_selector" with the CSS selector of the table you want to scrape
+# You can find the selector using browser developer tools (right-click on the table and inspect)
+table_selector <- "table"
+
+# Extract the table and store it in a data frame
+marshalls_list <- page %>%
+  html_table(fill = TRUE) %>% 
+  .[[1]]
+
+```
+
+```{r}
+evictions <- read.socrata("https://data.cityofnewyork.us/resource/6z8x-wfk4.csv") %>% 
+  mutate(year = year(executed_date))
+
+```
+
+```{r}
+marshalls_evictions_revenue <- full_join(marshall_revenue, evictions, by = c("marshal_last_name" = "marshal_last_name", "year" = "year"))
+```
+
+```{r}
+
+marshall_by_year_sum <- marshalls_evictions_revenue %>% 
+  group_by(marshal_last_name, year) %>% 
+  summarize(assessment_fee = first(assessment_fee),
+            adjusted_gross_fee_poundage = first(adjusted_gross_fee_poundage),
+            net_income_marshal_s_office = first(net_income_marshal_s_office),
+            no_evictions = sum(!is.na(court_index_number), na.rm = T))
+
+```
+
+
