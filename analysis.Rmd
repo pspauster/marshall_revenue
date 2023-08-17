@@ -54,15 +54,4 @@ executed_by_marshall_year <- evictions %>%
 marshalls_evictions_revenue <- full_join(marshall_revenue, executed_by_marshall_year, by = c("marshal_last_name" = "marshal_last_name", "year" = "year"))
 ```
 
-```{r}
-
-marshall_by_year_sum <- marshalls_evictions_revenue %>% 
-  group_by(marshal_last_name, year) %>% 
-  summarize(assessment_fee = first(assessment_fee),
-            adjusted_gross_fee_poundage = first(adjusted_gross_fee_poundage),
-            net_income_marshal_s_office = first(net_income_marshal_s_office),
-            no_evictions = sum(!is.na(court_index_number), na.rm = T))
-
-```
-
 
