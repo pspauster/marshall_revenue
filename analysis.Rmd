@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(RSocrata)
+
 library(rvest)
 library(xml2)
 ```
@@ -54,4 +55,20 @@ executed_by_marshall_year <- evictions %>%
 marshalls_evictions_revenue <- full_join(marshall_revenue, executed_by_marshall_year, by = c("marshal_last_name" = "marshal_last_name", "year" = "year"))
 ```
 
+```{r}
+
+income_year_total <- marshall_revenue %>% 
+  group_by(year) %>% 
+  summarize(total_income = sum(net_income_marshal_s_office, na.rm = T))
+
+write_csv(income_year_total %>% filter(year > 2016), "income_year.csv")
+
+
+evictions_year_total <- evictions %>% 
+  group_by(year) %>% 
+  summarize(total_evictions = n())
+
+write_csv(evictions_year_total %>% filter(year < 2024), "evictions_year.csv")
+
+```
 
