@@ -49,10 +49,16 @@ executed_by_marshall_year <- evictions %>%
   group_by(marshal_first_name, marshal_last_name, year) %>% 
   summarize(no_evictions = sum(!is.na(executed_date), na.rm = T))
 
+
+  
+
 ```
 
 ```{r}
 marshalls_evictions_revenue <- full_join(marshall_revenue, executed_by_marshall_year, by = c("marshal_last_name" = "marshal_last_name", "year" = "year"))
+
+last_year <- marshalls_evictions_revenue %>% 
+  filter(year == 2023)
 ```
 
 ```{r}
@@ -69,6 +75,9 @@ evictions_year_total <- evictions %>%
   summarize(total_evictions = n())
 
 write_csv(evictions_year_total %>% filter(year < 2024), "evictions_year.csv")
+
+left_join(evictions_year_total %>% filter(year < 2024), income_year_total %>% filter(year > 2016)) %>% 
+  write_csv("evictions_income_year.csv")
 
 ```
 
