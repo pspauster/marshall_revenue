@@ -1,0 +1,128 @@
+---
+title: "Lobbying"
+author: "Patrick"
+date: "2024-06-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(scales)
+library(DT)
+library(janitor)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+
+
+marshals_association <- read_csv(URLencode(
+  "https://data.ny.gov/resource/t9kf-dqbc.csv?contractual_client_name=MARSHAL'S ASSOCIATION OF THE CITY OF NEW YORK, INC.&$limit=20000"
+))
+
+```
+
+
+
+```{r}
+
+compensation <- marshals_association %>% 
+  select(form_submission_id:compensation, unique_id) %>% 
+  group_by(form_submission_id) %>% 
+  summarize_all(first)
+
+expenses <- marshals_association %>% 
+  select(form_submission_id, reporting_year, beneficial_client_name, reimbursed_expenses:coalition_contribution_expense, unique_id) %>% 
+  mutate(expense_id = map_chr(str_split(unique_id, "-"), 3))
+
+itemized_expenses <- filter(expenses, expense_id != "0") %>% 
+  group_by(expense_id) %>% 
+  summarize_all(first)
+
+other_expenses <- filter(expenses, expense_id == "0")
+
+lobbying_activities <- marshals_association %>% 
+  select(form_submission_id, reporting_year, beneficial_client_name, lobbying_subjects:unique_id) %>% 
+  filter(!is.na(party_name))
+
+
+```
+
+
+## Total Compensation Spending By Marshals Since 2019
+
+```{r}
+compensation %>% 
+  group_by(reporting_year) %>% 
+  summarize(total_compensation = sum(compensation)) %>% 
+  ggplot()+
+  geom_line(mapping = aes(x = reporting_year, y = total_compensation))+
+  scale_y_continuous(labels = scales::comma)+
+  labs(y = "Dollars ($)",
+       x = "Year")
+
+```
+
+## Lobbying Compensation Over Time by Organization
+
+```{r}
+compensation %>% 
+  group_by(reporting_year, beneficial_client_name) %>% 
+  summarize(total_compensation = sum(compensation)) %>% 
+  arrange(beneficial_client_name) %>% 
+  pivot_wider(names_from = reporting_year, values_from = total_compensation) %>% 
+  adorn_totals(where = c("row", "col")) %>% 
+  datatable() %>% 
+  formatCurrency(columns = 2:7, digits = 0)
+  
+```
+
+
+## Total Expenses by Year
+
+No itemized expenses
+
+```{r}
+
+lobbying_activities %>%
+  mutate(bill = case_when(
+    focus_identifying_number == "Intro 1496" ~ "Animal shelter", # https://legistar.council.nyc.gov/LegislationDetail.aspx?ID=3913885&GUID=DEF1CF29-AD6A-4690-9C6D-DDEC1AF89E74&Options=&Search=
+    focus_identifying_number == "Intro 0122" ~ "Increase fees for parking", # https://legistar.council.nyc.gov/LegislationDetail.aspx?ID=3331733&GUID=C6BD15C9-99FA-4984-BF5A-5C65636663E0&Options=&Search=
+    focus_identifying_number == "Intro 0168" ~ "Land Use action about sidewalk sheds", #https://legistar.council.nyc.gov/LegislationDetail.aspx?ID=3963806&GUID=A9467EF4-A4E9-43BF-965A-A3C19AB44D5C&Options=ID|Text|&Search=0168
+    focus_identifying_number == "A4745" ~ "Let's Marshals act like sheriffs when executing money judgements", # https://www.nysenate.gov/legislation/bills/2019/A4745/amendment/original
+    focus_identifying_number == "S5776" ~ "money judgement bill but senate", #https://www.nysenate.gov/legislation/bills/2019/S5776
+    focus_identifying_number == "Intro 1912" ~"pandemic money judgement ban", # https://legistar.council.nyc.gov/LegislationDetail.aspx?ID=4425073&GUID=92A9AA87-68DF-4695-ADC7-10CD82013F4A&Options=ID|Text|&Search=1912
+    focus_identifying_number == "A10602" ~"increasing fixed fees for sheriffs", # https://www.nysenate.gov/legislation/bills/2021/A10602
+    focus_identifying_number == "S9173" ~"increasing fixed fees for sheriffs", # https://www.nysenate.gov/legislation/bills/2021/S9173
+    focus_identifying_number == "A3647" ~"task force to investigate position of city marshals", # https://www.nysenate.gov/legislation/bills/2019/A3647
+    T ~ focus_identifying_number
+  )) %>% 
+  group_by(reporting_year, lobbying_focus_type, bill) %>%
+  summarize(contacts= n()) %>% arrange(desc(contacts))%>%
+  adorn_totals() %>% 
+  filter(bill == "Total" | row_number() <= 10) %>% 
+  datatable(caption = 'Note: bill names are cleaned for most targeted laws, but not throughout')
+
+```
+
+## Most Targeted People
+
+```{r}
+parties_sum_clean <- lobbying_activities %>%
+  mutate(
+         party_name_clean = case_when(
+    T ~ str_remove_all(party_name, "Senator |Assemblymember |Assembly member ")
+  ))
+
+ parties_sum_clean %>% 
+  group_by(party_name_clean) %>%
+  summarize(contacts= n()) %>% arrange(desc(contacts))%>%
+  filter(!party_name_clean %in% c("General", "Executive Chamber", "Legislative Leadership")) %>% 
+  #head(10) %>% 
+  datatable(caption = 'Note: bill names are cleaned for most targeted legislators and bodies, but not throughout')
+
+```
+
+
+

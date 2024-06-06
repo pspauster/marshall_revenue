@@ -1,0 +1,31 @@
+---
+title: "donations"
+author: "Patrick"
+date: "2024-06-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+library(tidyverse)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+filers <- read_csv("filers_6.6.24.csv", )
+
+names(filers) <- c("filer_id", "filer_name", "compliance_type_desc", "filter_type_desc", "filer_status", "committee_type_desc",
+                                    "office_desc", "district", "county_desc", "municipality_desc_subdivision_desc", "treasurer_first_name",  "treasurer_middle_name", "treasurer_last_name", "address", "city", "state", "zipcode")
+```
+
+```{r}
+
+state_candidates <- read_csv("STATE_CANDIDATE.csv")
+
+names(state_candidates) <- c("")
+
+```
+
+
