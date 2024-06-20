@@ -24,7 +24,58 @@ names(filers) <- c("filer_id", "filer_name", "compliance_type_desc", "filter_typ
 
 state_candidates <- read_csv("STATE_CANDIDATE.csv")
 
-names(state_candidates) <- c("")
+var_names <- c(
+'FILER_ID',
+'FILER_PREVIOUS_ID',
+'CAND_COMM_NAME',
+'ELECTION_YEAR',
+'ELECTION_TYPE',
+'COUNTY_DESC',
+'FILING_ABBREV',
+'FILING_DESC',
+'R_AMEND',
+'FILING_CAT_DESC',
+'FILING_SCHED_ABBREV',
+'FILING_SCHED_DESC',
+'LOAN_LIB_NUMBER',
+'TRANS_NUMBER',
+'TRANS_MAPPING',
+'SCHED_DATE',
+'ORG_DATE',
+'CNTRBR_TYPE_DESC',
+'CNTRBN_TYPE_DESC',
+'TRANSFER_TYPE_DESC',
+'RECEIPT_TYPE_DESC',
+'RECEIPT_CODE_DESC',
+'PURPOSE_CODE_DESC',
+'R_SUBCONTRACTOR',
+'FLNG_ENT_NAME',
+'FLNG_ENT_FIRST_NAME',
+'FLNG_ENT_MIDDLE_NAME',
+'FLNG_ENT_LAST_NAME',
+'FLNG_ENT_ADD1',
+'FLNG_ENT_CITY',
+'FLNG_ENT_STATE',
+'FLNG_ENT_ZIP',
+'FLNG_ENT_COUNTRY',
+'PAYMENT_TYPE_DESC',
+'PAY_NUMBER',
+'OWED_AMT',
+'ORG_AMT',
+'LOAN_OTHER_DESC',
+'TRANS_EXPLNTN',
+'R_ITEMIZED',
+'R_LIABILITY',
+'ELECTION_YEAR_R',
+'OFFICE_DESC',
+'DISTRICT',
+'DIST_OFF_CAND_BAL_PROP'
+                             )
+
+names(state_candidates) <- var_names
+state_committees <- read_csv("STATE_COMMITTEE.csv")
+names(state_committees) <- var_names
+
 
 ```
 
