@@ -12,6 +12,14 @@ library(tidyverse)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+
+marshals_assoc_contributions <- read_csv("https://data.ny.gov/resource/e9ss-239a.csv?$query=SELECT%0A%20%20%60filer_id%60%2C%0A%20%20%60filer_previous_id%60%2C%0A%20%20%60cand_comm_name%60%2C%0A%20%20%60election_year%60%2C%0A%20%20%60election_type%60%2C%0A%20%20%60county_desc%60%2C%0A%20%20%60filing_abbrev%60%2C%0A%20%20%60filing_desc%60%2C%0A%20%20%60r_amend%60%2C%0A%20%20%60filing_cat_desc%60%2C%0A%20%20%60filing_sched_abbrev%60%2C%0A%20%20%60filing_sched_desc%60%2C%0A%20%20%60loan_lib_number%60%2C%0A%20%20%60trans_number%60%2C%0A%20%20%60trans_mapping%60%2C%0A%20%20%60sched_date%60%2C%0A%20%20%60org_date%60%2C%0A%20%20%60cntrbr_type_desc%60%2C%0A%20%20%60cntrbn_type_desc%60%2C%0A%20%20%60transfer_type_desc%60%2C%0A%20%20%60receipt_type_desc%60%2C%0A%20%20%60receipt_code_desc%60%2C%0A%20%20%60purpose_code_desc%60%2C%0A%20%20%60r_subcontractor%60%2C%0A%20%20%60flng_ent_name%60%2C%0A%20%20%60flng_ent_first_name%60%2C%0A%20%20%60flng_ent_middle_name%60%2C%0A%20%20%60flng_ent_last_name%60%2C%0A%20%20%60flng_ent_add1%60%2C%0A%20%20%60flng_ent_city%60%2C%0A%20%20%60flng_ent_state%60%2C%0A%20%20%60flng_ent_zip%60%2C%0A%20%20%60flng_ent_country%60%2C%0A%20%20%60payment_type_desc%60%2C%0A%20%20%60pay_number%60%2C%0A%20%20%60owed_amt%60%2C%0A%20%20%60org_amt%60%2C%0A%20%20%60loan_other_desc%60%2C%0A%20%20%60trans_explntn%60%2C%0A%20%20%60r_itemized%60%2C%0A%20%20%60r_liability%60%2C%0A%20%20%60election_year_r%60%2C%0A%20%20%60office_desc%60%2C%0A%20%20%60district%60%2C%0A%20%20%60dist_off_cand_bal_prop%60%0AWHERE%20caseless_contains(%60flng_ent_add1%60%2C%20%22120%20Westchester%20Sq%22)%0AORDER%20BY%20%60election_year%60%20DESC%20NULL%20LAST")
+
+```
+
+
+
 
 ```{r}
 filers <- read_csv("filers_6.6.24.csv", )

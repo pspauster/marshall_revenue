@@ -21,6 +21,11 @@ marshals_association <- read_csv(URLencode(
   "https://data.ny.gov/resource/t9kf-dqbc.csv?contractual_client_name=MARSHAL'S ASSOCIATION OF THE CITY OF NEW YORK, INC.&$limit=20000"
 ))
 
+
+assembly_bill <- read_csv(URLencode(
+  "https://data.ny.gov/resource/t9kf-dqbc.json?$query=SELECT%0A%20%20%60form_submission_id%60%2C%0A%20%20%60reporting_year%60%2C%0A%20%20%60filing_type%60%2C%0A%20%20%60reporting_period%60%2C%0A%20%20%60principal_lobbyist_name%60%2C%0A%20%20%60contractual_client_name%60%2C%0A%20%20%60beneficial_client_name%60%2C%0A%20%20%60co_lobbyist%60%2C%0A%20%20%60sub_lobbyist%60%2C%0A%20%20%60individual_lobbyist_name%60%2C%0A%20%20%60compensation%60%2C%0A%20%20%60reimbursed_expenses%60%2C%0A%20%20%60expenses_less_than_75%60%2C%0A%20%20%60lobbying_expenses_for_non%60%2C%0A%20%20%60itemized_expenses%60%2C%0A%20%20%60expense_type%60%2C%0A%20%20%60expense_paid_to%60%2C%0A%20%20%60expense_reimbursed_by_client%60%2C%0A%20%20%60expense_purpose%60%2C%0A%20%20%60expense_date%60%2C%0A%20%20%60expense_details_name%60%2C%0A%20%20%60expense_details_title%60%2C%0A%20%20%60expense_details_employer%60%2C%0A%20%20%60expense_details_amount%60%2C%0A%20%20%60coalition_name%60%2C%0A%20%20%60contribution_amount%60%2C%0A%20%20%60was_an_expense_incurred_on%60%2C%0A%20%20%60total_amount_of_the_expense%60%2C%0A%20%20%60was_the_expense_paid_for%60%2C%0A%20%20%60if_pooled_funds_were_used%60%2C%0A%20%20%60total_contribution_amount%60%2C%0A%20%20%60coalition_contribution_expense%60%2C%0A%20%20%60lobbying_subjects%60%2C%0A%20%20%60level_of_government%60%2C%0A%20%20%60lobbying_focus_type%60%2C%0A%20%20%60focus_identifying_number%60%2C%0A%20%20%60type_of_lobbying_communication%60%2C%0A%20%20%60government_body%60%2C%0A%20%20%60monitoring_only%60%2C%0A%20%20%60party_name%60%2C%0A%20%20%60person_lobbied%60%2C%0A%20%20%60department_lobbied%60%2C%0A%20%20%60unique_id%60%0AORDER%20BY%0A%20%20%60reporting_year%60%20DESC%20NULL%20FIRST%2C%0A%20%20%60principal_lobbyist_name%60%20ASC%20NULL%20LAST%2C%0A%20%20%60form_submission_id%60%20ASC%20NULL%20LAST"
+))
+
 ```
 
 
