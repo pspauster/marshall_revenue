@@ -18,6 +18,16 @@ marshals_assoc_contributions <- read_csv("https://data.ny.gov/resource/e9ss-239a
 
 ```
 
+```{r}
+marshals_assoc_contributions %>% 
+  filter(sched_date >= as.Date("2014-01-01")) %>% 
+  summarize(
+    donations = sum(org_amt)
+  )
+
+
+
+```
 
 
 
