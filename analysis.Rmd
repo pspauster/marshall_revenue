@@ -81,3 +81,12 @@ left_join(evictions_year_total %>% filter(year < 2024), income_year_total %>% fi
 
 ```
 
+```{r}
+
+marshalls_evictions_revenue %>% 
+  filter(year == 2023) %>% 
+  summarize(total_assessment_fee = sum(assessment_fee, na.rm = T))
+
+
+```
+
